@@ -5,7 +5,7 @@ Punto de entrada principal del sistema
 
 from rich.console import Console
 from rich.prompt import Prompt
-from sistema_citas.modules.medicos.medicos import menu_medicos
+
 
 console = Console()
 
@@ -30,7 +30,7 @@ def menu_principal():
                 console.print("\n[yellow]Módulo de Pacientes en desarrollo...[/yellow]")
                 Prompt.ask("\n[dim]Presione Enter para continuar[/dim]", default="")
             elif opcion == "2":
-                menu_medicos()
+                console.print("en espera")
             elif opcion == "3":
                 console.print("\n[yellow]Módulo de Citas en desarrollo...[/yellow]")
                 Prompt.ask("\n[dim]Presione Enter para continuar[/dim]", default="")
