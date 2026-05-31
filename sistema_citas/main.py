@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """main.py  —  raíz del repositorio
 Integrante 4 mariam: integración y menú principal
  
@@ -138,3 +139,9 @@ def interfaz_eliminar_paciente():
             console.print("[bold red]❌ Error: El ID ingresado no existe.[/bold red]")
     else:
         console.print("[bold blue]🚫 Operación cancelada.[/bold blue]")
+=======
+from ui.menus import menu_principal
+
+if __name__ == "__main__":
+    menu_principal()
+>>>>>>> citas

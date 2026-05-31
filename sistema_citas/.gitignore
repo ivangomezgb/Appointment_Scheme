@@ -1,5 +1,11 @@
-venv/
+.venv/
 __pycache__/
+<<<<<<< HEAD
 
 .venv/
 
+=======
+*.pyc
+*.pyo
+.env
+>>>>>>> citas
