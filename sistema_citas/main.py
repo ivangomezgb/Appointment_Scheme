@@ -32,10 +32,18 @@ PRINCIPIO DE RESPONSABILIDAD ÚNICA aplicado aquí:
 from rich.console import Console 
 from rich.panel   import Panel  # → caja con borde para el encabezado
 from rich.table   import Table  # → tabla con columnas alineadas
+from rich.prompt import Prompt
+
+import modules.pacientes.pacientes as pacientes_module
+from modules.pacientes.validaciones_pacientes import (
+    solicitar_id_paciente,
+    solicitar_nombre_paciente,
+    solicitar_telefono_paciente,
+)
 
 #1 funcion reutilizable para json para leer el archivo y obtener ruta asi:
 
-from sistema_citas.modules.shared.archivos import (
+from modules.shared.archivos import (
     leer_json, #→ lee un archivo .json y devuelve una lista
     obtener_ruta_data, #→ construye la ruta a la carpeta data/
 )
@@ -47,19 +55,19 @@ from sistema_citas.modules.shared.archivos import (
 # - El try/except permite que el sistema arranque aunque un módulo aún no esté listo: lo marca como "en desarrollo" en lugar de explotar con un ImportError.
 
 try:
-    from sistema_citas.modules.pacientes.pacientes import menu_pacientes
+    from modules.pacientes.pacientes import menu_pacientes
     _PACIENTES_LISTO = True
 except ImportError:
     _PACIENTES_LISTO = False   # módulo pendiente de su integrante
  
 try:
-    from sistema_citas.modules.medicos.medicos import menu_medicos
+    from modules.medicos.medicos import menu_medicos
     _MEDICOS_LISTO = True
 except ImportError:
     _MEDICOS_LISTO = False
  
 try:
-    from sistema_citas.modules.citas.citas import menu_citas
+    from modules.citas.citas import menu_citas
     _CITAS_LISTO = True
 except ImportError:
     _CITAS_LISTO = False
@@ -67,3 +75,68 @@ except ImportError:
 
     
 console = Console()
+
+# ==========================================
+# INTERFACES VISUALES (PEGA ESTO AL FINAL)
+# ==========================================
+
+def mostrar_tabla_pacientes():
+    """Muestra la lista de pacientes en una tabla elegante de Rich."""
+    # Usamos tu alias: pacientes_module
+    pacientes = pacientes_module.listar_pacientes()
+    
+    if not pacientes:
+        console.print("[bold yellow]⚠️ No hay pacientes registrados en el sistema.[/bold yellow]")
+        return
+
+    # Creamos la estructura de la tabla con Rich
+    tabla = Table(title="📋 LISTADO DE PACIENTES", title_style="bold magenta", header_style="bold cyan")
+    tabla.add_column("ID Paciente", justify="center", style="bold green")
+    tabla.add_column("Nombre Completo", justify="left")
+    tabla.add_column("Teléfono", justify="center")
+
+    # Llenamos la tabla con los datos del JSON
+    for p in pacientes:
+        tabla.add_row(str(p["id_paciente"]), p["nombre"], p["telefono"])
+
+    console.print(tabla)
+
+
+def interfaz_actualizar_paciente():
+    """Interfaz para solicitar el ID y los nuevos datos de un paciente."""
+    console.print(Panel("[bold yellow]🔄 ACTUALIZAR DATOS DE PACIENTE[/bold yellow]"))
+    
+    id_a_buscar = solicitar_id_paciente("Ingrese el ID del paciente que desea modificar")
+    paciente = pacientes_module.obtener_paciente_por_id(id_a_buscar)
+    
+    if not paciente:
+        console.print("[bold red]❌ Error: No se encontró ningún paciente con ese ID.[/bold red]")
+        return
+
+    console.print(f"[gray]Modificando a: {paciente['nombre']} (Tel: {paciente['telefono']})[/gray]\n")
+    
+    nuevo_nombre = solicitar_nombre_paciente()
+    nuevo_telefono = solicitar_telefono_paciente()
+    
+    exito = pacientes_module.actualizar_paciente(id_a_buscar, nuevo_nombre, nuevo_telefono)
+    
+    if exito:
+        console.print("[bold green]✨ ¡Paciente actualizado correctamente! ✨[/bold green]")
+
+
+def interfaz_eliminar_paciente():
+    """Interfaz para eliminar un paciente por ID."""
+    console.print(Panel("[bold red]❌ ELIMINAR PACIENTE DEL SISTEMA[/bold red]"))
+    
+    id_a_borrar = solicitar_id_paciente("Ingrese el ID del paciente que desea eliminar")
+    
+    confirmacion = Prompt.ask(f"[bold yellow]¿Está seguro de eliminar al paciente ID {id_a_borrar}? (s/n)[/bold yellow]", choices=["s", "n"], default="n")
+    
+    if confirmacion == "s":
+        exito = pacientes_module.eliminar_paciente(id_a_borrar)
+        if exito:
+            console.print("[bold green]🗑️ El paciente fue eliminado con éxito.[/bold green]")
+        else:
+            console.print("[bold red]❌ Error: El ID ingresado no existe.[/bold red]")
+    else:
+        console.print("[bold blue]🚫 Operación cancelada.[/bold blue]")

@@ -7,7 +7,7 @@ from rich.console import Console
 from rich.prompt import Prompt
 
 
-from sistema_citas.modules.medicos.medicos import menu_medicos
+from modules.medicos.medicos import menu_medicos
 
 
 console = Console()

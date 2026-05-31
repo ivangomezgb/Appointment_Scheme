@@ -41,6 +41,14 @@ from rich.console import Console #→ objeto principal para imprimir con colores
 from rich.table import Table #→ construye tablas con columnas alineadas
 from rich.panel import Panel #→ caja con borde decorativo
 from rich import box as rich_box
+from rich.prompt import Prompt
+
+import modules.pacientes.pacientes as pacientes_module
+from modules.pacientes.validaciones_pacientes import (
+    solicitar_id_paciente,
+    solicitar_nombre_paciente,
+    solicitar_telefono_paciente,
+)
 
 # Instancia compartida de Console para todo este archivo
 console = Console()
@@ -178,5 +186,7 @@ def mostrar_tabla(
 # ════════════════════════════════════════════════════════════════
 def mostrar_titulo_seccion(titulo: str, color: str = "cyan") -> None:
     console.print(f"\n[bold {color}]── {titulo} ──[/bold {color}]")
+
+    
 
     
