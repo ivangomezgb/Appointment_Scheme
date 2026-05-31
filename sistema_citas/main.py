@@ -76,9 +76,7 @@ except ImportError:
     
 console = Console()
 
-# ==========================================
-# INTERFACES VISUALES (PEGA ESTO AL FINAL)
-# ==========================================
+
 
 def mostrar_tabla_pacientes():
     """Muestra la lista de pacientes en una tabla elegante de Rich."""

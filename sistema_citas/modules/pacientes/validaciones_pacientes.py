@@ -41,9 +41,7 @@ def solicitar_id_paciente(mensaje: str = "Ingrese el ID del paciente") -> int:
             # Aquí capturamos el error si el usuario digita letras en vez de números
             console.print("[bold red]❌ Error de formato: Debe ingresar un número entero válido.[/bold red]")
 
-            # ==========================================
-# INTERFACES VISUALES (PEGA ESTO AL FINAL)
-# ==========================================
+         
 
 def mostrar_tabla_pacientes():
     """Muestra la lista de pacientes en una tabla elegante de Rich."""
