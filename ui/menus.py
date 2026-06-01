@@ -12,9 +12,7 @@ console = Console()
 ESTADOS_VALIDOS = ["Pendiente", "Confirmada", "Cancelada", "Completada"]
 
 
-# ─────────────────────────────────────────────
-# UTILIDADES DE PRESENTACIÓN
-# ─────────────────────────────────────────────
+#UTILIDADES
 
 def mostrar_exito(mensaje: str) -> None:
     console.print(f"\n[bold green]✔ {mensaje}[/bold green]\n")
@@ -32,9 +30,7 @@ def pausar() -> None:
     console.input("\n[dim]Presiona Enter para continuar...[/dim]")
 
 
-# ─────────────────────────────────────────────
 # TABLAS
-# ─────────────────────────────────────────────
 
 def tabla_pacientes(lista: list) -> None:
     if not lista:
@@ -44,10 +40,10 @@ def tabla_pacientes(lista: list) -> None:
     tabla.add_column("ID", style="cyan", justify="center")
     tabla.add_column("Nombre", style="white")
     tabla.add_column("Edad", justify="center")
-    tabla.add_column("Teléfono", style="green")
+    tabla.add_column("Teléfono", style="green")#table.add_column : agrega columnas,color,alineacion,
     tabla.add_column("Email", style="blue")
     for p in lista:
-        tabla.add_row(str(p['id']), p['nombre'], str(p['edad']), p['telefono'], p['email'])
+        tabla.add_row(str(p['id']), p['nombre'], str(p['edad']), p['telefono'], p['email']) #tabla.add_row:crea linea horizontal reglas: 3columnas 3 datos
     console.print(tabla)
 
 
@@ -87,7 +83,7 @@ def tabla_citas(lista: list) -> None:
         }.get(c.get('estado', ''), 'white')
         tabla.add_row(
             str(c['id']),
-            c.get('nombre_paciente', str(c['id_paciente'])),
+            c.get('nombre_paciente', str(c['id_paciente'])), #.get: Busca una clave: si está, te da su valor; si no, te da None sin romper el código.
             c.get('nombre_medico', str(c['id_medico'])),
             c.get('especialidad_medico', 'N/A'),
             c['fecha'],
@@ -98,9 +94,7 @@ def tabla_citas(lista: list) -> None:
     console.print(tabla)
 
 
-# ─────────────────────────────────────────────
 # MENÚ PRINCIPAL
-# ─────────────────────────────────────────────
 
 def menu_principal() -> None:
     while True:
@@ -131,9 +125,7 @@ def menu_principal() -> None:
             break
 
 
-# ─────────────────────────────────────────────
 # MENÚ PACIENTES
-# ─────────────────────────────────────────────
 
 def menu_pacientes() -> None:
     while True:
@@ -177,7 +169,7 @@ def _form_crear_paciente() -> None:
         email = Prompt.ask("Email")
         nuevo = pacientes.crear_paciente(nombre, edad, telefono, email)
         mostrar_exito(f"Paciente '{nuevo['nombre']}' creado con ID {nuevo['id']}.")
-    except Exception as e:
+    except Exception as e: #Evita que el programa se rompa si el usuario ingresa texto en lugar de un número (guarda el error en e)
         mostrar_error(f"Error al crear paciente: {e}")
     pausar()
 
@@ -187,7 +179,7 @@ def _form_actualizar_paciente() -> None:
     try:
         id_p = IntPrompt.ask("ID del paciente a actualizar")
         paciente = pacientes.obtener_paciente_por_id(id_p)
-        if not paciente:
+        if not paciente:  # Sirve para verificar si algo está vacío (o no existe) y mostrar un error.
             mostrar_error(f"No existe paciente con ID {id_p}.")
             pausar()
             return
@@ -195,7 +187,7 @@ def _form_actualizar_paciente() -> None:
         nombre = Prompt.ask("Nuevo nombre", default=paciente['nombre'])
         edad_str = Prompt.ask("Nueva edad", default=str(paciente['edad']))
         telefono = Prompt.ask("Nuevo teléfono", default=paciente['telefono'])
-        email = Prompt.ask("Nuevo email", default=paciente['email'])
+        email = Prompt.ask("Nuevo email", default=paciente['email']) # Sirve para pedir un texto al usuario con colores y estilos atractivos en la terminal.
 
         edad = int(edad_str)
         if edad <= 0 or edad > 120:
@@ -235,9 +227,7 @@ def _form_eliminar_paciente() -> None:
     pausar()
 
 
-# ─────────────────────────────────────────────
 # MENÚ MÉDICOS
-# ─────────────────────────────────────────────
 
 def menu_medicos() -> None:
     while True:
@@ -323,9 +313,7 @@ def _form_eliminar_medico() -> None:
     pausar()
 
 
-# ─────────────────────────────────────────────
 # MENÚ CITAS
-# ─────────────────────────────────────────────
 
 def menu_citas() -> None:
     while True:
@@ -416,9 +404,7 @@ def _form_eliminar_cita() -> None:
     pausar()
 
 
-# ─────────────────────────────────────────────
 # MENÚ BÚSQUEDA
-# ─────────────────────────────────────────────
 
 def menu_busqueda() -> None:
     while True:

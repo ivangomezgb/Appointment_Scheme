@@ -7,7 +7,7 @@ def buscar_paciente_por_nombre(nombre: str) -> list:
     Busca pacientes cuyo nombre contenga el texto dado (sin importar mayúsculas).
     """
     datos = cargar_datos()
-    termino = nombre.lower().strip()
+    termino = nombre.lower().strip() #Lower: letras minusculas .strip: elimina espacios en blanco
     return [p for p in datos['pacientes'] if termino in p['nombre'].lower()]
 
 
@@ -25,7 +25,7 @@ def buscar_citas_por_fecha(fecha: str) -> list:
     Retorna todas las citas de una fecha específica (formato YYYY-MM-DD).
     Incluye nombre de paciente y médico para mostrar en tabla.
     """
-    termino = fecha.strip()
+    termino = fecha.strip() #Stip: elimina espacios en blanco
     citas = listar_citas_con_detalle()
     return [c for c in citas if c['fecha'] == termino]
 
