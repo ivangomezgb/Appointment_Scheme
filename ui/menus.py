@@ -42,7 +42,7 @@ def tabla_pacientes(lista: list) -> None:
     # 2. Envolvemos nuestro rango con track() de rich
     for paso in track(range(100), description="Cargando pacientes..."):
                 
-        # 3. Pausamos el código 0.05 segundos en cada iteración para simular trabajo
+        # 3. Pausamos el código 0.01 segundos en cada iteración para simular trabajo
         time.sleep(0.01) 
     console.print(" [bold green]\n¡Carga completada con éxito!  [/bold green]", justify="center")
    
@@ -62,6 +62,11 @@ def tabla_pacientes(lista: list) -> None:
 
 
 def tabla_medicos(lista: list) -> None:
+    for paso in track(range(100), description="Cargando médicos disponibles..."):
+       #  Pausamos el código 0.01 segundos en cada iteración para simular trabajo
+        time.sleep(0.01) 
+    console.print(" [bold green]\n¡Carga completada con éxito!  [/bold green]", justify="center")
+    
     if not lista:
         mostrar_info("No hay médicos registrados.")
         return
@@ -76,6 +81,7 @@ def tabla_medicos(lista: list) -> None:
 
 
 def tabla_citas(lista: list) -> None:
+    
     if not lista:
         mostrar_info("No hay citas registradas.")
         return
@@ -144,7 +150,7 @@ def menu_principal() -> None:
 def menu_pacientes() -> None:
     while True:
         console.clear()
-        console.print(Panel("[ bold cyan]👤 Gestión de Pacientes[/ bold cyan]", style="white on cyan" ))
+        console.print(Panel("[bold cyan]👤 Gestión de Pacientes[/bold cyan]", style="cyan" ))
         console.print("[1] Listar pacientes")
         console.print("[2] Crear paciente")
         console.print("[3] Actualizar paciente")
