@@ -1,3 +1,4 @@
+# pip install -r requeriments
 markdown-it-py==4.2.0
 mdurl==0.1.2
 Pygments==2.20.0

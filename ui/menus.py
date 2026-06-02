@@ -1,15 +1,20 @@
+import time  # 1. Importamos la librería encargada del tiempo
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 from rich.prompt import Prompt, IntPrompt
 from rich import box
 from rich.text import Text
+from rich.align import Align
+
+from rich.progress import track
 
 from modules import pacientes, medicos, citas, busqueda
 
 console = Console()
 
 ESTADOS_VALIDOS = ["Pendiente", "Confirmada", "Cancelada", "Completada"]
+
 
 
 #UTILIDADES
@@ -33,10 +38,18 @@ def pausar() -> None:
 # TABLAS
 
 def tabla_pacientes(lista: list) -> None:
+
+    # 2. Envolvemos nuestro rango con track() de rich
+    for paso in track(range(100), description="Cargando pacientes..."):
+                
+        # 3. Pausamos el código 0.05 segundos en cada iteración para simular trabajo
+        time.sleep(0.01) 
+    console.print(" [bold green]\n¡Carga completada con éxito!  [/bold green]", justify="center")
+   
     if not lista:
         mostrar_info("No hay pacientes registrados.")
         return
-    tabla = Table(title="Pacientes Registrados", box=box.ROUNDED, highlight=True)
+    tabla = Table(title="\nPacientes Registrados", box=box.ROUNDED, highlight=True)
     tabla.add_column("ID", style="cyan", justify="center")
     tabla.add_column("Nombre", style="white")
     tabla.add_column("Edad", justify="center")
@@ -44,7 +57,8 @@ def tabla_pacientes(lista: list) -> None:
     tabla.add_column("Email", style="blue")
     for p in lista:
         tabla.add_row(str(p['id']), p['nombre'], str(p['edad']), p['telefono'], p['email']) #tabla.add_row:crea linea horizontal reglas: 3columnas 3 datos
-    console.print(tabla)
+    console.print(tabla , justify="center")
+
 
 
 def tabla_medicos(lista: list) -> None:
@@ -58,7 +72,7 @@ def tabla_medicos(lista: list) -> None:
     tabla.add_column("Teléfono", style="green")
     for m in lista:
         tabla.add_row(str(m['id']), m['nombre'], m['especialidad'], m['telefono'])
-    console.print(tabla)
+    console.print(tabla , justify="center")
 
 
 def tabla_citas(lista: list) -> None:
@@ -91,7 +105,7 @@ def tabla_citas(lista: list) -> None:
             c['motivo'],
             f"[{estado_color}]{c['estado']}[/{estado_color}]"
         )
-    console.print(tabla)
+    console.print(tabla , justify="center")
 
 
 # MENÚ PRINCIPAL
@@ -102,7 +116,7 @@ def menu_principal() -> None:
         console.print(Panel(
             Text("🏥  Sistema de Gestión de Citas Médicas", justify="center", style="bold white"),
             style="bold blue",
-            padding=(1, 4)
+            padding=(1, 4), 
         ))
         console.print("[1] Gestión de Pacientes")
         console.print("[2] Gestión de Médicos")
@@ -130,7 +144,7 @@ def menu_principal() -> None:
 def menu_pacientes() -> None:
     while True:
         console.clear()
-        console.print(Panel("[bold cyan]👤 Gestión de Pacientes[/bold cyan]", style="cyan"))
+        console.print(Panel("[ bold cyan]👤 Gestión de Pacientes[/ bold cyan]", style="white on cyan" ))
         console.print("[1] Listar pacientes")
         console.print("[2] Crear paciente")
         console.print("[3] Actualizar paciente")
@@ -140,8 +154,9 @@ def menu_pacientes() -> None:
         opcion = Prompt.ask("Selecciona una opción", choices=["0", "1", "2", "3", "4"])
 
         if opcion == "1":
-            tabla_pacientes(pacientes.listar_pacientes())
+            tabla_pacientes(pacientes.listar_pacientes())            
             pausar()
+
         elif opcion == "2":
             _form_crear_paciente()
         elif opcion == "3":
