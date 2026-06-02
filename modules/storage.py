@@ -1,8 +1,10 @@
 import json
 import os
-
+from data.citas import DATA_PATH
+from data.pacientes import DATA_PATH
+from data.medicos import DATA_PATH
 # Ruta absoluta al archivo de datos, relativa a este módulo
-DATA_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'datos.json')
+DATA_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'datos.json','citas.json','medicos.json','pacientes.json')
 
 ESTRUCTURA_INICIAL = {
     "pacientes": [],
@@ -18,7 +20,7 @@ def cargar_datos() -> dict:
     """
     try:
         with open(DATA_PATH, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            return json.load(f) # lee un archivo JSON y lo crea cm objeto en python
     except FileNotFoundError:
         return ESTRUCTURA_INICIAL.copy()
     except json.JSONDecodeError:
