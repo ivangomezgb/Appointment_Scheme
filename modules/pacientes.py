@@ -16,12 +16,12 @@ def crear_paciente(nombre: str, edad: int, telefono: str, email: str) -> dict:
     datos = cargar_datos()
     nuevo = {
         "id": _generar_id_paciente(datos['pacientes']),
-        "nombre": nombre.strip(),
+        "nombre": nombre.strip(),# elimina caracteres al principio y al final de string
         "edad": edad,
         "telefono": telefono.strip(),
         "email": email.strip()
     }
-    datos['pacientes'].append(nuevo)
+    datos['pacientes'].append(nuevo)#agrega un elemento al final de la lista
     guardar_datos(datos)
     return nuevo
 
