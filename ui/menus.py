@@ -13,10 +13,6 @@ from modules import pacientes, medicos, citas, busqueda
 
 console = Console()
 
-ESTADOS_VALIDOS = ["Pendiente", "Confirmada", "Cancelada", "Completada"]
-
-
-
 #UTILIDADES
 
 def mostrar_exito(mensaje: str) -> None:
@@ -93,14 +89,7 @@ def tabla_citas(lista: list) -> None:
     tabla.add_column("Fecha", style="yellow")
     tabla.add_column("Hora", style="yellow")
     tabla.add_column("Motivo")
-    tabla.add_column("Estado", style="bold")
     for c in lista:
-        estado_color = {
-            "Pendiente": "yellow",
-            "Confirmada": "green",
-            "Cancelada": "red",
-            "Completada": "blue"
-        }.get(c.get('estado', ''), 'white')
         tabla.add_row(
             str(c['id']),
             c.get('nombre_paciente', str(c['id_paciente'])), #.get: Busca una clave: si está, te da su valor; si no, te da None sin romper el código.
@@ -108,8 +97,7 @@ def tabla_citas(lista: list) -> None:
             c.get('especialidad_medico', 'N/A'),
             c['fecha'],
             c['hora'],
-            c['motivo'],
-            f"[{estado_color}]{c['estado']}[/{estado_color}]"
+            c['motivo']
         )
     console.print(tabla , justify="center")
 
@@ -393,9 +381,7 @@ def _form_actualizar_cita() -> None:
         fecha = Prompt.ask("Nueva fecha (YYYY-MM-DD)", default=cita['fecha'])
         hora = Prompt.ask("Nueva hora (HH:MM)", default=cita['hora'])
         motivo = Prompt.ask("Nuevo motivo", default=cita['motivo'])
-        console.print(f"Estados válidos: {', '.join(ESTADOS_VALIDOS)}")
-        estado = Prompt.ask("Nuevo estado", default=cita['estado'], choices=ESTADOS_VALIDOS)
-        citas.actualizar_cita(id_c, fecha, hora, motivo, estado)
+        citas.actualizar_cita(id_c, fecha, hora, motivo)
         mostrar_exito("Cita actualizada correctamente.")
     except Exception as e:
         mostrar_error(f"Error: {e}")
@@ -436,10 +422,9 @@ def menu_busqueda() -> None:
         console.print("[3] Buscar citas por fecha")
         console.print("[4] Buscar citas por paciente")
         console.print("[5] Buscar citas por médico")
-        console.print("[6] Filtrar citas por estado")
         console.print("[0] Volver\n")
 
-        opcion = Prompt.ask("Selecciona una opción", choices=["0", "1", "2", "3", "4", "5", "6"])
+        opcion = Prompt.ask("Selecciona una opción", choices=["0", "1", "2", "3", "4", "5"])
 
         if opcion == "1":
             termino = Prompt.ask("Nombre del paciente")
@@ -460,11 +445,6 @@ def menu_busqueda() -> None:
         elif opcion == "5":
             termino = Prompt.ask("Nombre del médico")
             tabla_citas(busqueda.buscar_citas_por_medico(termino))
-            pausar()
-        elif opcion == "6":
-            console.print(f"Estados disponibles: {', '.join(ESTADOS_VALIDOS)}")
-            estado = Prompt.ask("Estado", choices=ESTADOS_VALIDOS)
-            tabla_citas(busqueda.buscar_citas_por_estado(estado))
             pausar()
         elif opcion == "0":
             break
