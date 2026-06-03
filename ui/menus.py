@@ -66,7 +66,7 @@ def tabla_medicos(lista: list) -> None:
        #  Pausamos el código 0.01 segundos en cada iteración para simular trabajo
         time.sleep(0.01) 
     console.print(" [bold green]\n¡Carga completada con éxito!  [/bold green]", justify="center")
-    
+
     if not lista:
         mostrar_info("No hay médicos registrados.")
         return

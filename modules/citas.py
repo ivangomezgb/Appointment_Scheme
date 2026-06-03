@@ -14,12 +14,33 @@ def _generar_id_cita(citas: list) -> int:
     #1. Si no hay citas → retorna 1 (primera cita)
         #2. Si hay citas → busca el ID más alto y suma 1
 
+def _existe_conflicto_horario(id_medico: int, fecha: str, hora: str, excluir_id_cita: int = None) -> bool:
+    """
+    Verifica si ya existe una cita para el mismo médico en la misma fecha y hora.
+    Si se pasa excluir_id_cita (ej. al actualizar), se omite esa cita de la comprobación.
+    - True si ya existe una cita activa en ese horario, False si está libre.
+    """
+    datos = cargar_datos()
+    for cita in datos['citas']:
+        # Al actualizar, ignoramos la propia cita que se está editando
+         if excluir_id_cita is not None and cita['id'] == excluir_id_cita:
+            continue
+        # Comparamos médico + fecha + hora.
+        # Las citas Canceladas se consideran libres (el slot queda disponible).
+         if (cita['id_medico'] == id_medico
+                and cita['fecha'] == fecha.strip()
+                and cita['hora'] == hora.strip()
+                and cita.get('estado', '') != 'Cancelada'):
+            return True          # ← conflicto encontrado
+    return False                 # ← horario libre
 
 def crear_cita(id_paciente: int, id_medico: int, fecha: str, hora: str, motivo: str) -> dict:
     """
     Crea una nueva cita médica.
     Valida que el paciente y el médico existan antes de guardar (lógica relacional).
     Retorna la cita creada o lanza ValueError si las referencias no existen.
+
+    - raises ValueError SI alguna falla
     """
     # Validación relacional
     if obtener_paciente_por_id(id_paciente) is None:
@@ -29,6 +50,14 @@ def crear_cita(id_paciente: int, id_medico: int, fecha: str, hora: str, motivo: 
         #→ Es lanzar un error con un mensaje descriptivo.
         #→ El menú lo captura con try-except y lo muestra en rojo.
         #→ Se usa cuando los datos de entrada son inválidos.
+
+    # Validar conflicto de horario - RETO FINAL
+    if _existe_conflicto_horario(id_medico, fecha, hora):
+        medico = obtener_medico_por_id(id_medico)
+        raise ValueError(
+            f"El Dr. {medico['nombre']} ya tiene una cita el {fecha.strip()} "
+            f"a las {hora.strip()}. Por favor elige otra hora."
+        )
 
     datos = cargar_datos()
     nueva = { #→ Crear el diccionario de la cita
@@ -66,18 +95,35 @@ def obtener_cita_por_id(id_cita: int) -> dict | None:
 def actualizar_cita(id_cita: int, fecha: str, hora: str, motivo: str, estado: str) -> bool:
     """
     Actualiza los datos de una cita existente.
+
+    ⏳Si se cambia la fecha O hora, vuelve a validar el conflicto de horario
+    del médico asignado (excluyendo la propia cita para no bloquearse).
+
     Retorna True si se actualizó, False si no se encontró.
     """
     datos = cargar_datos()
     for cita in datos['citas']:
         if cita['id'] == id_cita:
+
+            # Validar conflicto (excluyendo esta misma cita)
+ # ── Reto Final: Revalidar conflicto al cambiar fecha/hora ─────────
+            if fecha.strip() != cita['fecha'] or hora.strip() != cita['hora']:
+                if _existe_conflicto_horario(cita['id_medico'], fecha, hora,
+                                           excluir_id_cita=id_cita):
+                    medico = obtener_medico_por_id(cita['id_medico'])
+                    raise ValueError(
+                        f"El Dr. {medico['nombre']} ya tiene una cita el "
+                        f"{fecha.strip()} a las {hora.strip()}. "
+                        f"Por favor elige otra hora."
+                    )
             cita['fecha'] = fecha.strip()
             cita['hora'] = hora.strip()
             cita['motivo'] = motivo.strip()
-            cita['estado'] = estado.strip() #espacio borra
+            cita['estado'] = estado.strip()
             guardar_datos(datos)
             return True
-    return False
+    return False              
+
 
 
 def eliminar_cita(id_cita: int) -> bool:
