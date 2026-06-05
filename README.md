@@ -18,12 +18,12 @@
 7️⃣ Uso — comandos y ejemplos  
 8️⃣ Validaciones y reglas de negocio  
 9️⃣ Calidad, pruebas y linters  
-🔟 Buenas prácticas de Git  
+🔟 Buenas prácticas de Git
  
 
 ---
 
-## 🧑‍💻 0. Integrantes
+## 🧑‍💻 Integrantes
 
 | Rol | Modulo Responsable |
 |-----|--------|
