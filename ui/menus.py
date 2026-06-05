@@ -1,12 +1,12 @@
-import time  # 1. Importamos la librería encargada del tiempo
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
-from rich.prompt import Prompt, IntPrompt
-from rich import box
-from rich.text import Text
-from rich.align import Align
-from rich.progress import track
+import time  #  Importamos la librería encargada del tiempo
+from rich.console import Console # imprime estilos y colores en la terminal
+from rich.table import Table # Tablas para mostar datos de pacientes , medicos y citas
+from rich.panel import Panel #Menus interactivos 
+from rich.prompt import Prompt, IntPrompt # es otro tipo de input pero con validaciones 
+# y estilos predefinidos para ui mas interactiva en la terminal 
+from rich import box # estilos de bordes para tablas
+from rich.text import Text # Aplica varios colores y estilos a una misma frase.
+from rich.progress import track # barra de progreso simulador de cargar para mejorar la ux del usuario
 
 # Importación de los módulos internos que contienen la lógica de negocio y persistencia
 from modules import pacientes, medicos, citas, busqueda
@@ -14,12 +14,12 @@ from modules import pacientes, medicos, citas, busqueda
 # Inicialización del objeto Console de Rich para el manejo de estilos en la terminal
 console = Console()
 
-# ==========================================
-# SECCIÓN: UTILIDADES DE INTERFAZ DE USUARIO
-# ==========================================
 
-def mostrar_exito(mensaje: str) -> None:
-    """Muestra un mensaje de éxito formateado en verde con un checkmark."""
+# SECCIÓN: Alertas y mensajes globales
+
+
+def mostrar_exito(mensaje: str) -> None: 
+    """Muestra un mensaje de éxito formateado en verde con un checkmark(chulito verde)."""
     console.print(f"\n[bold green]✔ {mensaje}[/bold green]\n")
 
 
@@ -38,9 +38,9 @@ def pausar() -> None:
     console.input("\n[dim]Presiona Enter para continuar...[/dim]")
 
 
-# ==========================================
+
 # SECCIÓN: TABLAS INFORMATIVAS (RICH)
-# ==========================================
+
 
 def tabla_pacientes(lista: list) -> None:
     """
@@ -134,9 +134,9 @@ def tabla_citas(lista: list) -> None:
     console.print(tabla, justify="center")
 
 
-# ==========================================
+
 # SECCIÓN: MENÚ PRINCIPAL
-# ==========================================
+
 
 def menu_principal() -> None:
     """Muestra la interfaz del menú principal y enruta a los submenús."""
@@ -169,9 +169,8 @@ def menu_principal() -> None:
             break # Rompe el ciclo infinito terminando el programa de forma limpia
 
 
-# ==========================================
 # SECCIÓN: SUBMENÚ Y FORMULARIOS - PACIENTES
-# ==========================================
+
 
 def menu_pacientes() -> None:
     """Muestra las opciones de CRUD y flujos para el módulo de pacientes."""
@@ -198,7 +197,7 @@ def menu_pacientes() -> None:
         elif opcion == "0":
             break # Retorna al menú principal
 
-
+# Validacion de crear pacientes
 def _form_crear_paciente() -> None:
     """Formulario interactivo para registrar un nuevo paciente en el sistema."""
     console.print(Panel("[bold]Nuevo Paciente[/bold]", style="cyan"))
@@ -228,7 +227,7 @@ def _form_crear_paciente() -> None:
         mostrar_error(f"Error al crear paciente: {e}")
     pausar()
 
-
+# Validacion de actualizar paciente
 def _form_actualizar_paciente() -> None:
     """Formulario interactivo para modificar los datos de un paciente existente."""
     tabla_pacientes(pacientes.listar_pacientes()) # Muestra los pacientes para referencia de IDs
@@ -266,7 +265,7 @@ def _form_actualizar_paciente() -> None:
         mostrar_error(f"Error: {e}")
     pausar()
 
-
+# Validacion de formulario de eliminar paciente
 def _form_eliminar_paciente() -> None:
     """Formulario para remover permanentemente un paciente por su ID."""
     tabla_pacientes(pacientes.listar_pacientes())
@@ -293,9 +292,9 @@ def _form_eliminar_paciente() -> None:
     pausar()
 
 
-# ==========================================
+
 # SECCIÓN: SUBMENÚ Y FORMULARIOS - MÉDICOS
-# ==========================================
+
 
 def menu_medicos() -> None:
     """Muestra las opciones de CRUD y flujos para el módulo de médicos."""
@@ -322,7 +321,7 @@ def menu_medicos() -> None:
         elif opcion == "0":
             break  
 
-
+# Validacion de formulario de crear medico
 def _form_crear_medico() -> None:
     """Formulario interactivo para registrar un nuevo médico especialista."""
     console.print(Panel("[bold]Nuevo Médico[/bold]", style="magenta"))
@@ -341,7 +340,7 @@ def _form_crear_medico() -> None:
         mostrar_error(f"Error al crear médico: {e}")
     pausar()
 
-
+# Validacion de actualizar medico 
 def _form_actualizar_medico() -> None:
     """Formulario interactivo para modificar los datos de un médico."""
     tabla_medicos(medicos.listar_medicos())
@@ -363,7 +362,7 @@ def _form_actualizar_medico() -> None:
         mostrar_error(f"Error: {e}")
     pausar()
 
-
+# Validacion de eliminacion de medicos
 def _form_eliminar_medico() -> None:
     """Formulario para remover la ficha de un médico del sistema."""
     tabla_medicos(medicos.listar_medicos())
@@ -389,9 +388,9 @@ def _form_eliminar_medico() -> None:
     pausar()
 
 
-# ==========================================
+
 # SECCIÓN: SUBMENÚ Y FORMULARIOS - CITAS
-# ==========================================
+
 
 def menu_citas() -> None:
     """Muestra las opciones de agendamiento y control de citas médicas."""
@@ -418,7 +417,7 @@ def menu_citas() -> None:
         elif opcion == "0":
             break
 
-
+# Validacion de crear cita
 def _form_crear_cita() -> None:
     """Formulario relacional para vincular un paciente y un médico en una fecha y hora."""
     console.print(Panel("[bold]Nueva Cita[/bold]", style="yellow"))
@@ -442,7 +441,7 @@ def _form_crear_cita() -> None:
         mostrar_error(f"Error al crear cita: {e}")
     pausar()
 
-
+# Validacion de actualizar cita
 def _form_actualizar_cita() -> None:
     """Permite reprogramar la fecha, hora o el motivo de una cita agendada."""
     tabla_citas(citas.listar_citas_con_detalle())
@@ -464,7 +463,7 @@ def _form_actualizar_cita() -> None:
         mostrar_error(f"Error: {e}")
     pausar()
 
-
+# Validacion de eliminar cita  
 def _form_eliminar_cita() -> None:
     """Formulario para cancelar/remover un registro de cita."""
     tabla_citas(citas.listar_citas_con_detalle())
@@ -490,9 +489,9 @@ def _form_eliminar_cita() -> None:
     pausar()
 
 
-# ==========================================
+
 # SECCIÓN: MENÚ BÚSQUEDA Y FILTROS
-# ==========================================
+
 
 def menu_busqueda() -> None:
     """Menú secundario especializado para consultas avanzadas y filtros específicos."""
