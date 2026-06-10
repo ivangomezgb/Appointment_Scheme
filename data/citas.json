@@ -1,11 +1,1 @@
-[
-    {
-        "id": 1,
-        "id_paciente": 1,
-        "id_medico": 1,
-        "fecha": "2026-05-06",
-        "hora": "11:00",
-        "motivo": "por turno",
-        "estado": "Pendiente"
-    }
-]
+[]
