@@ -1,7 +1,7 @@
 import json
 import os
 
-# Rutas absolutas a los archivos de datos separados por módulo
+# Rutas absolutas a los archivos de datos separados por módulo - une las carpetas y archivos sin importar del sistema
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
 PACIENTES_PATH = os.path.join(DATA_DIR, 'pacientes.json')
 MEDICOS_PATH = os.path.join(DATA_DIR, 'medicos.json')
@@ -14,26 +14,26 @@ RUTAS_DATOS = {
 }
 
 
-def cargar_datos(rutas: dict = None) -> dict:
-    """
-    Lee archivos JSON desde las rutas especificadas.
-    Si no se especifican rutas, usa RUTAS_DATOS por defecto.
+def cargar_datos(rutas: dict = None) -> dict: # carga datos desde los json a un dicci
+
+    # Lee archivos JSON desde las rutas especificadas.
+    # Si no se especifican rutas, usa RUTAS_DATOS por defecto.
     
-    Args:
-        rutas: Diccionario con clave: ruta (opcional)
+    # Args:
+        # rutas: Diccionario con clave: ruta (opcional)
     
-    Returns:
-        Diccionario con clave: contenido del JSON
-    """
-    if rutas is None:
-        rutas = RUTAS_DATOS
+    # Returns:
+        # Diccionario con clave: contenido del JSON
+        
+    if rutas is None: # si no se encuentra la ruta, sino se le asigna por defecto
+        rutas = RUTAS_DATOS 
     
-    datos = {}
-    for clave, ruta in rutas.items():
+    datos = {} # dicciona vacio almacena datos cargados
+    for clave, ruta in rutas.items(): # recorre clave, ruta en el parametro rutas 
         try:
             with open(ruta, 'r', encoding='utf-8') as f:
                 contenido = json.load(f)
-                datos[clave] = contenido if isinstance(contenido, list) else []
+                datos[clave] = contenido if isinstance(contenido, list)else []
         except:
             datos[clave] = []
     
@@ -41,14 +41,14 @@ def cargar_datos(rutas: dict = None) -> dict:
 
 
 def guardar_datos(datos: dict, rutas: dict = None) -> None:
-    """
-    Guarda datos en archivos JSON en las rutas especificadas.
-    Si no se especifican rutas, usa RUTAS_DATOS por defecto.
     
-    Args:
-        datos: Diccionario con clave: contenido a guardar
-        rutas: Diccionario con clave: ruta (opcional)
-    """
+    # Guarda datos en archivos JSON en las rutas especificadas.
+    # Si no se especifican rutas, usa RUTAS_DATOS por defecto.
+    
+    # Args:
+        # datos: Diccionario con clave: contenido a guardar
+        # rutas: Diccionario con clave: ruta (opcional)
+    
     if rutas is None:
         rutas = RUTAS_DATOS
     

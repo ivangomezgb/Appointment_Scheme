@@ -1,1 +1,30 @@
-[]
+[
+    {
+        "id": 2,
+        "nombre": "ivan",
+        "edad": 34,
+        "telefono": "345678",
+        "email": "ivan@gmail.com"
+    },
+    {
+        "id": 3,
+        "nombre": "julian",
+        "edad": 67,
+        "telefono": "345678",
+        "email": "julian@gmai.com"
+    },
+    {
+        "id": 4,
+        "nombre": "david",
+        "edad": 34,
+        "telefono": "13456789",
+        "email": "david03@gmail.com"
+    },
+    {
+        "id": 5,
+        "nombre": "leo",
+        "edad": 23,
+        "telefono": "23456789",
+        "email": "ivan@gmail.com"
+    }
+]
